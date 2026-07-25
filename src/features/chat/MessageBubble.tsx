@@ -10,8 +10,8 @@ const PERSONA_CONFIG = {
   system: { avatar: '⚙️', name: 'Sistema', accentClass: '' },
   pm: { avatar: '👔', name: 'Rafael (PM)', accentClass: 'message-pm' },
   dev_jr: { avatar: '👩‍💻', name: 'Ana (Dev Jr)', accentClass: 'message-dev-jr' },
-  candidathttps://github.com/jwaozera/hackathon-matchteste: { avatar: '🧑‍💻', name: 'Você', accentClass: 'message-candidate' },
-} as const;
+  candidate: { avatar: '🧑‍💻', name: 'Você', accentClass: 'message-candidate' },
+};
 
 export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
   const { sender, content, timestamp } = message;
