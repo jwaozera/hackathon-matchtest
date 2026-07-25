@@ -1,0 +1,49 @@
+{
+  "id": "tech-lead-pagamentos",
+  "title": "Tech Lead de Pagamentos",
+  "role": "Você é o novo Tech Lead da equipe de pagamentos da FinPay",
+  "context": "A FinPay é uma fintech em rápido crescimento. Nosso principal sistema de processamento de pagamentos está apresentando um bug crítico onde clientes relatam cobranças duplicadas em compras de alto volume. Sua missão inicial é corrigir esse bug e lidar com a equipe.",
+  "initialCode": "export class PaymentProcessor {\n  private transactions = new Map<string, any>();\n\n  async processPayment(orderId: string, amount: number, userId: string): Promise<boolean> {\n    // Verifica se já existe uma transação, mas ignora pequenas variações de tempo\n    const existingTx = this.transactions.get(`${userId}-${orderId}`);\n    \n    if (existingTx) {\n      return false; // Evita duplicidade se achar a transação\n    }\n\n    // Inicia a cobrança no gateway (mock)\n    const gatewayResult = await this.chargeGateway(amount);\n    \n    if (gatewayResult.success) {\n      this.transactions.set(`${userId}-${orderId}`, { amount, timestamp: Date.now() });\n      return true;\n    }\n\n    return false;\n  }\n\n  private async chargeGateway(amount: number) {\n    // Simula a latência do gateway de pagamento\n    await new Promise(resolve => setTimeout(resolve, 500));\n    return { success: true, transactionId: Math.random().toString(36).substring(7) };\n  }\n}",
+  "acts": [
+    {
+      "id": 1,
+      "name": "Bem-vindo",
+      "triggerMinute": 0,
+      "persona": "system",
+      "message": "Você acaba de fazer login no seu primeiro dia. O PM da equipe vai entrar em contato em breve com uma urgência.",
+      "description": "Introdução ao cenário"
+    },
+    {
+      "id": 2,
+      "name": "Ticket Crítico",
+      "triggerMinute": 1,
+      "persona": "pm",
+      "message": "Oi! Bem-vindo ao time. Olha, desculpa já chegar assim, mas o suporte está reportando cobranças duplicadas. O ticket diz que quando o usuário clica duas vezes rápido no botão de comprar, a cobrança vai duas vezes. Consegue dar uma olhada urgente no PaymentProcessor?",
+      "description": "Apresentação do problema de concorrência"
+    },
+    {
+      "id": 3,
+      "name": "Dúvida da Dev Jr",
+      "triggerMinute": 5,
+      "persona": "dev_jr",
+      "message": "Ei, estive olhando sua abordagem... achei um pouco complexa. Será que eu vou conseguir dar manutenção nisso depois? Pensei que podíamos só desabilitar o botão no frontend.",
+      "description": "Teste de comunicação e mentoria"
+    },
+    {
+      "id": 4,
+      "name": "Mudança de Escopo",
+      "triggerMinute": 8,
+      "persona": "pm",
+      "message": "Mudança de última hora: o cliente pediu pra não bloquear a compra duplicada. Em vez disso, envia pra uma fila de análise manual.",
+      "description": "Teste de adaptabilidade"
+    },
+    {
+      "id": 5,
+      "name": "Aviso de tempo",
+      "triggerMinute": 12,
+      "persona": "system",
+      "message": "Faltam 3 minutos para o fim da simulação.",
+      "description": "Pressão de tempo"
+    }
+  ]
+}

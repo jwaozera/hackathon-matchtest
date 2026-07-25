@@ -1,0 +1,19 @@
+{
+  "pm": [
+    "Entendi o seu ponto, mas precisamos pensar no impacto para o negócio. Isso resolve o problema de hoje ou evita os de amanhã?",
+    "Excelente, vou atualizar o roadmap com essa informação.",
+    "Temos um prazo bem apertado para essa feature. Qual o menor escopo que podemos entregar que resolva o problema?",
+    "Pode me dar uma estimativa de quando essa correção vai para produção?"
+  ],
+  "dev_jr": [
+    "Ah, agora faz sentido! Obrigado por explicar. Você tem algum material sobre esse pattern para eu estudar?",
+    "Eu tentei rodar aqui e deu um erro de tipagem. Acha que pode ser a versão do TypeScript?",
+    "Que legal essa solução! Vou tentar aplicar no ticket que peguei ontem também.",
+    "Desculpe, ainda estou com um pouco de dificuldade em entender essa parte do código. Pode detalhar mais?"
+  ],
+  "system": [
+    "O seu ambiente foi salvo com sucesso.",
+    "Atenção: A pipeline de CI reportou um warning na sua última alteração.",
+    "Conexão com o gateway de pagamentos estabelecida."
+  ]
+}

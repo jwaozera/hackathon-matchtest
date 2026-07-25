@@ -1,0 +1,17 @@
+{
+  "score": {
+    "hardSkills": 85,
+    "softSkills": 90,
+    "communication": 95,
+    "adaptability": 80,
+    "productFocus": 88,
+    "overall": 88
+  },
+  "details": {
+    "hardSkills": "Demonstrou bom domínio de concorrência em TypeScript, resolvendo o race condition com locks apropriados.",
+    "softSkills": "Lidou bem com a pressão da mudança de escopo.",
+    "communication": "Explicou claramente a solução para a Dev Jr de forma didática e respeitosa.",
+    "adaptability": "Ajustou rapidamente a arquitetura quando o requisito de fila de análise manual foi introduzido.",
+    "productFocus": "Entendeu que a prioridade era não perder vendas legítimas enquanto bloqueava fraudes/erros."
+  }
+}
