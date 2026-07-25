@@ -29,14 +29,7 @@ export default function Timer({ totalSeconds, isRunning, onTick, onTimeUp }: Tim
   useEffect(() => {
     if (isRunning && remainingSeconds > 0) {
       intervalRef.current = setInterval(() => {
-        setElapsedSeconds(prev => {
-          const next = prev + 1;
-          onTickRef.current?.(next);
-          if (next >= totalSeconds) {
-            onTimeUpRef.current?.();
-          }
-          return next;
-        });
+        setElapsedSeconds(prev => Math.min(prev + 1, totalSeconds));
       }, 1000);
     }
 
@@ -47,6 +40,18 @@ export default function Timer({ totalSeconds, isRunning, onTick, onTimeUp }: Tim
       }
     };
   }, [isRunning, totalSeconds, remainingSeconds]);
+
+  useEffect(() => {
+    if (!isRunning || elapsedSeconds === 0) {
+      return;
+    }
+
+    onTickRef.current?.(elapsedSeconds);
+
+    if (elapsedSeconds >= totalSeconds) {
+      onTimeUpRef.current?.();
+    }
+  }, [elapsedSeconds, isRunning, totalSeconds]);
 
   const formatTime = useCallback((min: number, sec: number) => {
     return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;

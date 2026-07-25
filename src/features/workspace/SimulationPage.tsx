@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useRef } from 'react';
 import CodeEditor from './CodeEditor';
 import Timer from './Timer';
 import ContextBar from './ContextBar';
@@ -35,11 +35,9 @@ export const SimulationPage: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [scorecard, setScorecard] = useState<IScorecardResponse | null>(null);
-  const [triggeredActs, setTriggeredActs] = useState<Set<number>>(new Set());
+  const triggeredActsRef = useRef<Set<number>>(new Set());
 
   const scenario = scenarioData as IScenario;
-
-  const elapsedMinutes = useMemo(() => Math.floor(elapsedSeconds / 60), [elapsedSeconds]);
 
   const currentActName = useMemo(
     () => getCurrentActName(elapsedSeconds, scenario),
@@ -70,12 +68,8 @@ export const SimulationPage: React.FC = () => {
 
     // Check scenario acts
     for (const act of scenario.acts) {
-      if (mins >= act.triggerMinute && !triggeredActs.has(act.id)) {
-        setTriggeredActs(prev => {
-          const next = new Set(prev);
-          next.add(act.id);
-          return next;
-        });
+      if (mins >= act.triggerMinute && !triggeredActsRef.current.has(act.id)) {
+        triggeredActsRef.current.add(act.id);
 
         // Small delay to feel natural
         const delay = act.triggerMinute === 0 ? 1500 : 800;
@@ -89,7 +83,7 @@ export const SimulationPage: React.FC = () => {
         }, delay);
       }
     }
-  }, [scenario.acts, triggeredActs, addMessage]);
+  }, [scenario.acts, addMessage]);
 
   // Handle candidate sending a message
   const handleSendMessage = useCallback(async (content: string) => {
@@ -129,7 +123,7 @@ export const SimulationPage: React.FC = () => {
     setCode(scenario.initialCode);
     setMessages([]);
     setElapsedSeconds(0);
-    setTriggeredActs(new Set());
+    triggeredActsRef.current = new Set();
   }, [scenario.initialCode]);
 
   // Handle time up
@@ -179,13 +173,13 @@ export const SimulationPage: React.FC = () => {
               <div className="scorecard-card__score" style={{ color: 'var(--accent-blue)' }}>
                 {scorecard.score.hardSkills}
               </div>
-              <div className="scorecard-card__detail">{scorecard.details.hardSkills}</div>
+              <div className="scorecard-card__detail">{scorecard.details.cleanCode}</div>
             </div>
 
             <div className="scorecard-card">
-              <div className="scorecard-card__label">Comunicação</div>
+              <div className="scorecard-card__label">Soft Skills</div>
               <div className="scorecard-card__score" style={{ color: 'var(--accent-green)' }}>
-                {scorecard.score.communication}
+                {scorecard.score.softSkills}
               </div>
               <div className="scorecard-card__detail">{scorecard.details.communication}</div>
             </div>
@@ -193,23 +187,17 @@ export const SimulationPage: React.FC = () => {
             <div className="scorecard-card">
               <div className="scorecard-card__label">Adaptabilidade</div>
               <div className="scorecard-card__score" style={{ color: 'var(--accent-purple)' }}>
-                {scorecard.score.adaptability}
+                {scorecard.score.softSkills}
               </div>
               <div className="scorecard-card__detail">{scorecard.details.adaptability}</div>
-            </div>
-
-            <div className="scorecard-card">
-              <div className="scorecard-card__label">Foco no Produto</div>
-              <div className="scorecard-card__score" style={{ color: 'var(--accent-orange)' }}>
-                {scorecard.score.productFocus}
-              </div>
-              <div className="scorecard-card__detail">{scorecard.details.productFocus}</div>
             </div>
           </div>
 
           <div className="scorecard-overall">
             <span className="scorecard-overall__label">Score Geral</span>
-            <span className="scorecard-overall__value">{scorecard.score.overall}</span>
+            <span className="scorecard-overall__value">
+              {Math.round((scorecard.score.hardSkills + scorecard.score.softSkills) / 2)}
+            </span>
             <span className="scorecard-overall__max">/ 100</span>
           </div>
 
@@ -240,9 +228,11 @@ export const SimulationPage: React.FC = () => {
           />
           <button
             className="simulation-submit-btn"
+            aria-label="Finalizar simulação e gerar scorecard"
             onClick={() => setShowSubmitModal(true)}
           >
-            🚀 Enviar
+            <span className="simulation-submit-btn__icon" aria-hidden="true">✓</span>
+            <span className="simulation-submit-btn__text">Finalizar e gerar scorecard</span>
           </button>
         </div>
       </header>

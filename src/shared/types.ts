@@ -29,18 +29,13 @@ export interface IScorecardResponse {
   score: {
     hardSkills: number;
     softSkills: number;
-    communication: number;
-    adaptability: number;
-    productFocus: number;
-    overall: number;
   };
   details: {
-    hardSkills: string;
-    softSkills: string;
+    cleanCode: string;
     communication: string;
     adaptability: string;
-    productFocus: string;
   };
+  error?: true;
 }
 
 export interface IScenarioAct {
